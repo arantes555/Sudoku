@@ -118,5 +118,10 @@ public class sudoku {
 		}
 	}
 
-	
+	static Grid sudokuToDLXGrid(int[][] matrix){
+		
+		
+		
+		return null;
+	}
 }
