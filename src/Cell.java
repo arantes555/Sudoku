@@ -1,10 +1,10 @@
 
-public class Cell { //Classe qui implémente une cellule de matrice de l'agorithme des liens dansants
+public class Cell { //Classe qui implÔøΩmente une cellule de matrice de l'agorithme des liens dansants
 
 	public Cell U,D,L,R;
 	public int row,col;
 	
-	public Cell(Cell R, Cell D,int row, int col){ // crée une nouvelle cellule à gauche de R et en haut de D
+	public Cell(Cell R, Cell D,int row, int col){ // crÔøΩe une nouvelle cellule ÔøΩ gauche de R et en haut de D
 		if (R==null)
 			this.R=this.L=this;
 		else{
@@ -23,13 +23,13 @@ public class Cell { //Classe qui implémente une cellule de matrice de l'agorithm
 		this.col=col;
 	}
 	
-	public static Cell head(){ // crée une nouvelle tete de matrice
+	public static Cell head(){ // crÔøΩe une nouvelle tete de matrice
 		return new Cell(null,null,0,0);
 	}
 	
-	public static void collumn(Cell R,int n){ // crée n nouvelles colonnes, placées a gauche de R
+	public static void column(Cell R,int n){ // crÔøΩe n nouvelles colonnes, placÔøΩes a gauche de R
 		Cell c = new Cell(R,null,0,n);
-		if(n>0) collumn(c,n-1);	
+		if(n>0) column(c,n-1);	
 	}
 	
 	public void hideV(){
@@ -51,7 +51,4 @@ public class Cell { //Classe qui implémente une cellule de matrice de l'agorithm
 		L.R=this;
 		R.L=this;
 	}
-	
-	
-	//public static boolean solve(){}
 }

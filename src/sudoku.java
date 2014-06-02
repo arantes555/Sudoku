@@ -1,5 +1,5 @@
 public class sudoku {
-
+ 
 	public static void main(String[] args) {
 		int n = Integer.parseInt(args[0]);
 		int[][] matrix = parse(args);
@@ -9,13 +9,13 @@ public class sudoku {
 		printMatrix(matrix);
 	}
 
-	static int[][] parse(String[] args) { // Parse les arguments donns en
-											// entre pour les transformer
+	static int[][] parse(String[] args) { // Parse les arguments donnï¿½s en
+											// entrï¿½e pour les transformer
 											// en une matrice utilisable
 
 		int n = Integer.parseInt(args[0]);
 		int[][] grid = new int[n * n][n * n]; // n=2 ou n=3, les cases sont par
-												// dfaut a 0
+												// dï¿½faut a 0
 
 		for (int i = 1; i < args.length; ++i) {
 			int l = Integer.parseInt(args[i].substring(0, 1));
@@ -25,7 +25,7 @@ public class sudoku {
 		}
 		// TODO : eventuellement changer le parsing pour accepter des lettres
 		// pour rendre compatible
-		// avec des tailles de grille suprieures
+		// avec des tailles de grille supï¿½rieures
 		return grid;
 	}
 
@@ -68,23 +68,23 @@ public class sudoku {
 				return false;
 		}
 
-		int xi = (x / n) * n; // coordonnes de la case en haut a gauche du bloc
-								// auquel appartient la case traite
+		int xi = (x / n) * n; // coordonnï¿½es de la case en haut a gauche du bloc
+								// auquel appartient la case traitï¿½e
 		int yi = (y / n) * n;
 
-		for (int i = 0; i < n; i++) { // vrifie dans le bloc
+		for (int i = 0; i < n; i++) { // vï¿½rifie dans le bloc
 			for (int j = 0; j < n; j++) {
 				if (matrix[xi + i][yi + j] == v && (xi + i != x || yi + j != y))
 					return false;
 			}
 		}
 
-		return true; // si aucun des testes prcdents n'a retourn false, la
+		return true; // si aucun des testes prï¿½cï¿½dents n'a retournï¿½ false, la
 						// case est valide
 	}
 
-	static boolean solve(int[][] matrix, int x, int y) { // rsoud le sudoku
-															// pass en
+	static boolean solve(int[][] matrix, int x, int y) { // rï¿½soud le sudoku
+															// passï¿½ en
 															// cherchant une
 															// solution par un
 															// algorithme de
@@ -96,7 +96,7 @@ public class sudoku {
 		if (y == n * n)
 			return true;
 
-		int nextX = x + 1; // calcule les coordonnes de la prochaine case
+		int nextX = x + 1; // calcule les coordonnï¿½es de la prochaine case
 		int nextY = y;
 		if (nextX == n * n) {
 			nextX = 0;
