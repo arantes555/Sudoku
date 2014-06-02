@@ -1,12 +1,11 @@
 public class sudoku {
 
-
 	public static void main(String[] args) {
 		int n = Integer.parseInt(args[0]);
-		int[][] matrix=parse(args);
+		int[][] matrix = parse(args);
 		printMatrix(matrix);
 		System.out.println("\nSolving...\n");
-		solve(matrix,0,0);
+		solve(matrix, 0, 0);
 		printMatrix(matrix);
 	}
 
@@ -32,12 +31,12 @@ public class sudoku {
 
 	static void printMatrix(int[][] matrix) {
 		int n = (int) Math.sqrt(matrix.length);
-		for (int i = 0; i < n*n; i++) {
+		for (int i = 0; i < n * n; i++) {
 			if (i % n == 0)
 				System.out.println(" "
-						+ new String(new char[(n * n * 2 + (n - 1)*2 + 1)])
+						+ new String(new char[(n * n * 2 + (n - 1) * 2 + 1)])
 								.replace("\0", "-"));
-			for (int j = 0; j < n*n; j++) {
+			for (int j = 0; j < n * n; j++) {
 				if (j % n == 0)
 					System.out.print("| ");
 				if (matrix[i][j] == 0)
@@ -49,63 +48,75 @@ public class sudoku {
 			System.out.println("|");
 		}
 		System.out.println(" "
-				+ new String(new char[(n * n * 2 + (n - 1)*2 + 1)]).replace("\0",
-						"-"));
+				+ new String(new char[(n * n * 2 + (n - 1) * 2 + 1)]).replace(
+						"\0", "-"));
 	}
 
-	static boolean isValid(int[][] matrix, int x,int y){ //verifie si une case est valide
-		
-		int v=matrix[x][y];
+	static boolean isValid(int[][] matrix, int x, int y) { // verifie si une
+															// case est valide
+
+		int v = matrix[x][y];
 		int n = (int) Math.sqrt(matrix.length);
 
-		for(int i=0;i<n*n;i++){ //verifie sur la ligne
-			if (matrix[i][y]==v && i!=x)
+		for (int i = 0; i < n * n; i++) { // verifie sur la ligne
+			if (matrix[i][y] == v && i != x)
 				return false;
 		}
-		
-		for(int i=0;i<n*n;i++){//verifie sur la colonne
-			if (matrix[x][i]==v && i!=y)
+
+		for (int i = 0; i < n * n; i++) {// verifie sur la colonne
+			if (matrix[x][i] == v && i != y)
 				return false;
 		}
-		
-		int xi=(x/n)*n; //coordonnŽes de la case en haut a gauche du bloc auquel appartient la case traitŽe
-		int yi=(y/n)*n;
-		
-		for(int i=0;i<n;i++){ //vŽrifie dans le bloc
-			for(int j=0;j<n;j++){
-				if (matrix[xi+i][yi+j]==v && (xi+i!=x || yi+j!=y))
+
+		int xi = (x / n) * n; // coordonnŽes de la case en haut a gauche du bloc
+								// auquel appartient la case traitŽe
+		int yi = (y / n) * n;
+
+		for (int i = 0; i < n; i++) { // vŽrifie dans le bloc
+			for (int j = 0; j < n; j++) {
+				if (matrix[xi + i][yi + j] == v && (xi + i != x || yi + j != y))
 					return false;
 			}
 		}
-		
-		return true; // si aucun des testes prŽcŽdents n'a retournŽ false, la case est valide
+
+		return true; // si aucun des testes prŽcŽdents n'a retournŽ false, la
+						// case est valide
 	}
-	
-	static boolean solve(int[][] matrix, int x, int y){
-		
+
+	static boolean solve(int[][] matrix, int x, int y) { // rŽsoud le sudoku
+															// passŽ en
+															// cherchant une
+															// solution par un
+															// algorithme de
+															// backtracking
+															// basic
+
 		int n = (int) Math.sqrt(matrix.length);
-		
-		if (y==n*n) return true;
-		
-		int nextX=x+1; //calcule les coordonnŽes de la prochaine case
-		int nextY=y;
-		if (nextX==n*n){
-			nextX=0;
+
+		if (y == n * n)
+			return true;
+
+		int nextX = x + 1; // calcule les coordonnŽes de la prochaine case
+		int nextY = y;
+		if (nextX == n * n) {
+			nextX = 0;
 			nextY++;
 		}
-		
-		if (matrix[x][y]!=0)
-			return solve(matrix,nextX,nextY);
-		else{
-			for(int i=1;i<=n*n;i++){
-				matrix[x][y]=i;
-				if(isValid(matrix,x,y))
-					if(solve(matrix,nextX,nextY))
+
+		if (matrix[x][y] != 0)
+			return solve(matrix, nextX, nextY);
+		else {
+			for (int i = 1; i <= n * n; i++) {
+				matrix[x][y] = i;
+				if (isValid(matrix, x, y))
+					if (solve(matrix, nextX, nextY))
 						return true;
 			}
-			matrix[x][y]=0;
+			matrix[x][y] = 0;
 			return false;
-			
+
 		}
 	}
+
+	
 }
