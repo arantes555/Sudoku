@@ -118,8 +118,58 @@ public class sudoku {
 		}
 	}
 
+	static class contrainte{
+		/* Classe représentant les différentes contraintes possibles
+		 * 
+		 * Si type = 1, on cherche la contrainte correspondant au fait qu'une case soit remplie.
+		 * On a alors a1=x, a2=y
+		 * 
+		 * Si type = 2, on cherche la contrainte correspondant au fait qu'une valeur existe dans une ligne.
+		 * On a alors a1 le numéro de ligne, a2 la valeur
+		 * 
+		 * Si type = 3, on cherche la contrainte correspondant au fait qu'une valeur existe dans une colonne.
+		 * On a alors a1 le numéro de colonne, a2 la valeur
+		 * 
+		 * Si type = 4, on cherche la contrainte correspondant au fait qu'une valeur existe dans un bloc.
+		 * On a alors a1 le numéro du bloc, a2 la valeur
+		 */
+		int type,a1,a2;
+		
+		public contrainte(int type, int a1, int a2){
+			this.type=type;this.a1=a1;this.a2=a2;
+		}
+	}
+	
+	static int findCol(int n, contrainte c){ //Cette fonction trouve le numéro de colonne correspondant à une contrainte.
+		return (c.type-1)*(n*n*n*n)+c.a2*n*n+c.a1+1;
+	}
+	
+	static contrainte findContrainte(int n, int numCol){ // Cette fonction trouve la contrainte correspondante à un numéro de colonne
+		numCol--;
+		int type = numCol/(n*n*n*n)+1;
+		int a2 = (numCol%type)/(n*n);
+		int a1= (numCol%type)%a2;
+		return new contrainte(type, a1, a2);
+		
+	}
+	
+	static int findBloc(int n, int x, int y){	// Cette fonction trouve le numéro du bloc correspondant à une case
+		return (y/n)*n+(x/n);
+	}
+	
 	static Grid sudokuToDLXGrid(int[][] matrix){
 		
+		int n = (int) Math.sqrt(matrix.length);
+		
+		Grid g = new Grid(4*n*n*n*n);
+		
+		for(int x=0;x<n*n;x++){
+			for (int y=0;y<n*n;y++){
+				if(matrix[x][y]==0){
+					
+				}
+			}
+		}
 		
 		
 		return null;
