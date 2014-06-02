@@ -55,7 +55,6 @@ public class Grid {
 			}
 		}
 	}
-<<<<<<< HEAD
 	void solveAll() {
 		if (head.R==head){ 									// Quand la matrice est vide,
 			// cela signifie que la pile actuelle de solutions est une solution 
@@ -138,9 +137,7 @@ public class Grid {
 		else System.out.println("no solution");
 
 	}
-=======
-	
->>>>>>> FETCH_HEAD
 }
+
 
 
