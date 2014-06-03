@@ -16,7 +16,6 @@ public class Grid {
 		Cell.column(head, nbCol, columns);
 
 	}
-<<<<<<< HEAD
 
 	public void addRow(int l, int[] col) { // ajoute une ligne a la Grid déja
 											// formée, avec le numero de lignes
@@ -34,22 +33,7 @@ public class Grid {
 			return;
 
 		Cell c = new Cell(null, columns[col[0]], l, col[0]);
-=======
-	public void printGrid(){
-		
-	}
-	public void addRow(int l, int[] col){	//ajoute une ligne a la Grid déja formée, avec le numero de lignes l, avec des 1 dans les colonnes de col
-		// /!\ Entrer les lignes dans le desordre peut donner un tableau incorrect
 
-		/*System.out.print("Adding Row "+l+" : [");
-		for(int i : col)
-			System.out.print(i+", ");
-		System.out.println("]");*/
-
-		if (col.length==0) return;
-
-		Cell c= new Cell(null,columns[col[0]], l, col[0]);
->>>>>>> FETCH_HEAD
 		columns[col[0]].row++;
 
 		for (int i = 1; i < col.length; i++) {
@@ -174,8 +158,4 @@ public class Grid {
 		else
 			System.out.println("no solution");
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> FETCH_HEAD
 }
