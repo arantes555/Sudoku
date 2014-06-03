@@ -277,5 +277,25 @@ public class sudoku {
 
 		return matrix;
 	}
+<<<<<<< HEAD
 
+=======
+	
+	static int[][] generateSudoku(int n){
+		
+		
+		Grid g= sudokuToDLXGrid(new int[n*n][n*n]);
+		
+		Stack<Integer> stack = new Stack<Integer>();
+		for(int i=0;i<(n*n*n*n);i++){
+			Cell c= g.randomCell();
+			stack.add(c.row);
+			g.coverCol(c.col);
+		}
+			
+		
+		return DLXRowsToSudoku(stack);
+	}
+	
+>>>>>>> FETCH_HEAD
 }

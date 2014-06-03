@@ -41,6 +41,26 @@ public class Grid {
 			columns[col[i]].row++;
 		}
 	}
+	
+	public int countColumns(){
+		int k=0;
+		for(Cell i = head.R;i!=head;i=i.R){
+			k++;
+		}
+		return k;
+	}
+	
+	public Cell randomCell(){
+		int c=(int) Math.random()*countColumns()+1;
+		Cell col=head;
+		for(int i=0;i<c;i++) // on choisi une colonne aléatoirement
+			col=col.R;
+		int r=(int) Math.random()*col.row+1;
+		Cell cell=col;
+		for(int i=0;i<r;i++) // on choisi une ligne aléatoirement
+			cell=cell.D;
+		return cell;
+	}
 
 	public void coverCol(int c) {
 		Cell C = columns[c];
