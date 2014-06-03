@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 public class sudoku {
 
 	public static void main(String[] args) {
@@ -7,8 +9,11 @@ public class sudoku {
 		System.out.println("\nSolving...\n");
 		Grid grid = sudokuToDLXGrid(matrix);
 		grid.solve();
-		for (int i : grid.solutions.get(0))
+		Stack<Integer> g = grid.solutions.get(0);
+		for (int i : g)
 			System.out.println(i);
+		printMatrix(DLXRowsToSudoku(g));
+		
 		// solve(matrix, 0, 0);
 		// printMatrix(matrix);
 	}
@@ -167,8 +172,8 @@ public class sudoku {
 															// de colonne
 		numCol--;
 		int type = numCol / (n * n * n * n);
-		int a2 = (numCol % type) / (n * n);
-		int a1 = (numCol % type) % a2;
+		int a2 = (numCol % (n * n * n * n)) / (n * n);
+		int a1 = (numCol % n*n) ;
 		return new contrainte(type, a1, a2);
 
 	}
@@ -183,6 +188,18 @@ public class sudoku {
 														// ligne correspondant
 														// au couple case,valeur
 		return y * n * n * n * n + x * n * n + val + 1;
+	}
+	
+	static int[] findCell(int n, int row){ //Trouve x, y et val avec le numero de la ligne dans Grid
+		int r=row-1;
+		int[] c= new int[3];
+		c[1] = r/(n*n*n*n);
+		c[0] = (r%n*n*n*n)/(n*n);
+		c[2] = (r%n*n)+1;
+		
+		System.out.println(row+ " " + c[0]+" "+c[1]+" "+c[2]);
+		return c;
+		
 	}
 
 	static int[] findContraintesCase(int n, int x, int y, int val) {
@@ -200,12 +217,12 @@ public class sudoku {
 			col[i] = findCol(n, contraintes[i]);
 		}
 
-		System.out.print("Case " + x + "," + y + " valeur:" + val
+		/*System.out.print("Case " + x + "," + y + " valeur:" + val
 				+ ". Contraintes : ");
 		for (int c : col) {
 			System.out.print(c + ", ");
 		}
-		System.out.print('\n');
+		System.out.print('\n');*/
 
 		return col;
 
@@ -237,4 +254,20 @@ public class sudoku {
 
 		return g;
 	}
+	
+	static int[][] DLXRowsToSudoku(Stack<Integer> g){
+		
+		int n2 = (int) Math.sqrt(g.size());
+		int n = (int) Math.sqrt(n2);
+		
+		int[][] matrix = new int[n2][n2];
+		
+		for(int r : g){
+			int[] c=findCell(n,r);
+			matrix[c[0]][c[1]]=c[2];
+		}
+		
+		return matrix;
+	}
+	
 }

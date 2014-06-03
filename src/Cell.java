@@ -28,7 +28,7 @@ public class Cell { // Classe qui impl�mente une cellule de matrice de
 		this.row = row;
 		this.col = col;
 
-		System.out.println("Creating cell " + row + ", " + col);
+		//System.out.println("Creating cell " + row + ", " + col);
 	}
 
 	public static Cell head() { // cr�e une nouvelle tete de matrice
