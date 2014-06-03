@@ -14,14 +14,18 @@ public class Grid {
 		solutions.add((new Stack<Integer>()));
 		head=Cell.head();
 		columns[0]=head;
-		Cell.column(head, nbCol);
-		for(Cell i=head.R;i!=head;i=i.R)
-			columns[i.col]=i;
+		Cell.column(head, nbCol,columns);
+		//for(Cell i=head.R;i!=head;i=i.R)
+		//	columns[i.col]=i;
 
 	}
 
 	public void addRow(int l, int[] col){	//ajoute une ligne a la Grid déja formée, avec le numero de lignes l, avec des 1 dans les colonnes de col
 		// /!\ Entrer les lignes dans le desordre peut donner un tableau incorrect
+		
+		System.out.print("Adding Row "+l+" : [");
+		for(int i : col)
+			System.out.print(i+", ");
 		if (col.length==0) return;
 
 		Cell c= new Cell(null,columns[col[0]], l, col[0]);

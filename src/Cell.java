@@ -27,9 +27,9 @@ public class Cell { //Classe qui impl�mente une cellule de matrice de l'agorit
 		return new Cell(null,null,0,0);
 	}
 	
-	public static void column(Cell R,int n){ // cr�e n nouvelles colonnes, plac�es a gauche de R
-		Cell c = new Cell(R,null,0,n);
-		if(n>0) column(c,n-1);	
+	public static void column(Cell R,int n,Cell[] col){ // cr�e n nouvelles colonnes, plac�es a gauche de R
+		for (int c=0; c<n; c++) 
+		    col[c+1] = new Cell(R, null, 0, c+1);
 	}
 	
 	public void hideV(){
