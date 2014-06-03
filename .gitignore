@@ -1,4 +1,8 @@
 
 *.class
 
+bin/*
+
 *.class
+
+bin/Grid.class

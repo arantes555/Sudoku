@@ -3,7 +3,7 @@ import java.util.Stack;
 
 
 public class Grid {
-	ArrayList<Stack<Integer>> solutions;
+	ArrayList<Stack<Integer>> solutions=new ArrayList<Stack<Integer>>();
 	int nbsol;
 	Cell head;
 	Cell[] columns; 
@@ -20,7 +20,7 @@ public class Grid {
 
 	}
 
-	public void addRow(int l, int[] col){	//ajoute une ligne a la Grid dï¿½ja formï¿½e, avec le numero de lignes l, avec des 1 dans les colonnes de col
+	public void addRow(int l, int[] col){	//ajoute une ligne a la Grid dŽja formŽe, avec le numero de lignes l, avec des 1 dans les colonnes de col
 		// /!\ Entrer les lignes dans le desordre peut donner un tableau incorrect
 		if (col.length==0) return;
 
@@ -122,7 +122,7 @@ public class Grid {
 	public static void main(String args[]){
 		String test[] = {"0010110", "1001001", "0110010", "1001000", "0100001", "0001101"};
 		int r = test.length, c = test[0].length();
-		Grid e = new Grid(c+1);
+		Grid e = new Grid(c);
 		ArrayList<int[]> test2 = new ArrayList<int[]>();
 		for (int i=0; i<r; i++){
 			test2.add(new int[c]);
@@ -135,8 +135,8 @@ public class Grid {
 			for (int i: e.solutions.get(0))
 				System.out.println(i+": "+test[i]);
 		else System.out.println("no solution");
-
 	}
+	
 }
 
 
