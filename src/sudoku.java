@@ -277,10 +277,6 @@ public class sudoku {
 
 		return matrix;
 	}
-<<<<<<< HEAD
-
-=======
-	
 	static int[][] generateSudoku(int n){
 		
 		
@@ -297,5 +293,4 @@ public class sudoku {
 		return DLXRowsToSudoku(stack);
 	}
 	
->>>>>>> FETCH_HEAD
 }
