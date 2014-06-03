@@ -1,14 +1,16 @@
 public class sudoku {
- 
+
 	public static void main(String[] args) {
 		int n = Integer.parseInt(args[0]);
 		int[][] matrix = parse(args);
 		printMatrix(matrix);
 		System.out.println("\nSolving...\n");
-		Grid grid= sudokuToDLXGrid(matrix);
+		Grid grid = sudokuToDLXGrid(matrix);
 		grid.solve();
-		//solve(matrix, 0, 0);
-		//printMatrix(matrix);
+		for (int i : grid.solutions.get(0))
+			System.out.println(i);
+		// solve(matrix, 0, 0);
+		// printMatrix(matrix);
 	}
 
 	static int[][] parse(String[] args) { // Parse les arguments donn�s en
@@ -70,7 +72,8 @@ public class sudoku {
 				return false;
 		}
 
-		int xi = (x / n) * n; // coordonn�es de la case en haut a gauche du bloc
+		int xi = (x / n) * n; // coordonn�es de la case en haut a gauche du
+								// bloc
 								// auquel appartient la case trait�e
 		int yi = (y / n) * n;
 
@@ -81,7 +84,8 @@ public class sudoku {
 			}
 		}
 
-		return true; // si aucun des testes pr�c�dents n'a retourn� false, la
+		return true; // si aucun des testes pr�c�dents n'a retourn� false,
+						// la
 						// case est valide
 	}
 
@@ -120,97 +124,117 @@ public class sudoku {
 		}
 	}
 
-	static class contrainte{
-		/* Classe repr�sentant les diff�rentes contraintes possibles
+	static class contrainte {
+		/*
+		 * Classe repr�sentant les diff�rentes contraintes possibles
 		 * 
-		 * Si type = 0, on cherche la contrainte correspondant au fait qu'une case soit remplie.
-		 * On a alors a1=x, a2=y
+		 * Si type = 0, on cherche la contrainte correspondant au fait qu'une
+		 * case soit remplie. On a alors a1=x, a2=y
 		 * 
-		 * Si type = 1, on cherche la contrainte correspondant au fait qu'une valeur existe dans une ligne.
-		 * On a alors a1 le num�ro de ligne, a2 la valeur
+		 * Si type = 1, on cherche la contrainte correspondant au fait qu'une
+		 * valeur existe dans une ligne. On a alors a1 le num�ro de ligne, a2
+		 * la valeur
 		 * 
-		 * Si type = 2, on cherche la contrainte correspondant au fait qu'une valeur existe dans une colonne.
-		 * On a alors a1 le num�ro de colonne, a2 la valeur
+		 * Si type = 2, on cherche la contrainte correspondant au fait qu'une
+		 * valeur existe dans une colonne. On a alors a1 le num�ro de colonne,
+		 * a2 la valeur
 		 * 
-		 * Si type = 3, on cherche la contrainte correspondant au fait qu'une valeur existe dans un bloc.
-		 * On a alors a1 le num�ro du bloc, a2 la valeur
+		 * Si type = 3, on cherche la contrainte correspondant au fait qu'une
+		 * valeur existe dans un bloc. On a alors a1 le num�ro du bloc, a2 la
+		 * valeur
 		 */
-		int type,a1,a2;
-		
-		public contrainte(int type, int a1, int a2){
-			this.type=type;this.a1=a1;this.a2=a2;
+		int type, a1, a2;
+
+		public contrainte(int type, int a1, int a2) {
+			this.type = type;
+			this.a1 = a1;
+			this.a2 = a2;
 		}
 	}
-	
-	static int findCol(int n, contrainte c){ //Cette fonction trouve le num�ro de colonne correspondant � une contrainte.
-		return (c.type)*(n*n*n*n)+c.a2*n*n+c.a1+1;
+
+	static int findCol(int n, contrainte c) { // Cette fonction trouve le
+												// num�ro de colonne
+												// correspondant � une
+												// contrainte.
+		return (c.type) * (n * n * n * n) + c.a2 * n * n + c.a1 + 1;
 	}
-	
-	static contrainte findContrainte(int n, int numCol){ // Cette fonction trouve la contrainte correspondante � un num�ro de colonne
+
+	static contrainte findContrainte(int n, int numCol) { // Cette fonction
+															// trouve la
+															// contrainte
+															// correspondante
+															// � un num�ro
+															// de colonne
 		numCol--;
-		int type = numCol/(n*n*n*n);
-		int a2 = (numCol%type)/(n*n);
-		int a1= (numCol%type)%a2;
+		int type = numCol / (n * n * n * n);
+		int a2 = (numCol % type) / (n * n);
+		int a1 = (numCol % type) % a2;
 		return new contrainte(type, a1, a2);
-		
+
 	}
-	
-	static int findBloc(int n, int x, int y){	// Cette fonction trouve le num�ro du bloc correspondant � une case
-		return (y/n)*n+(x/n);
+
+	static int findBloc(int n, int x, int y) { // Cette fonction trouve le
+												// num�ro du bloc
+												// correspondant � une case
+		return (y / n) * n + (x / n);
 	}
-	
-	static int findRow(int n, int x, int y, int val){ // Trouve le numero de ligne correspondant au couple case,valeur
-		return y*n*n*n*n+x*n*n+val+1;
+
+	static int findRow(int n, int x, int y, int val) { // Trouve le numero de
+														// ligne correspondant
+														// au couple case,valeur
+		return y * n * n * n * n + x * n * n + val + 1;
 	}
-	
-	static int[] findContraintesCase(int n, int x, int y, int val){
-		
-		//System.out.print("Case "+x+","+y+ " valeur:"+val+". Contraintes :");
-		
+
+	static int[] findContraintesCase(int n, int x, int y, int val) {
+
 		contrainte[] contraintes = new contrainte[4];
-				
-		contraintes[0]=new contrainte(0, x, y);
-		contraintes[1]=new contrainte(1,y,val);
-		contraintes[2]=new contrainte(2,x,val);
-		contraintes[3]= new contrainte(3,findBloc(n,x,y),val);
-		
+
+		contraintes[0] = new contrainte(0, x, y);
+		contraintes[1] = new contrainte(1, y, val);
+		contraintes[2] = new contrainte(2, x, val);
+		contraintes[3] = new contrainte(3, findBloc(n, x, y), val);
+
 		int[] col = new int[4];
-		
-		for(int i=0;i<4;i++){
-			col[i]=findCol(n,contraintes[i]);
+
+		for (int i = 0; i < 4; i++) {
+			col[i] = findCol(n, contraintes[i]);
 		}
-		
-		/*for(int c : col){
-			System.out.print(c+", ");
+
+		System.out.print("Case " + x + "," + y + " valeur:" + val
+				+ ". Contraintes : ");
+		for (int c : col) {
+			System.out.print(c + ", ");
 		}
-		System.out.print('\n');*/
-				
+		System.out.print('\n');
+
 		return col;
 
 	}
-	
-	static Grid sudokuToDLXGrid(int[][] matrix){
-		
+
+	static Grid sudokuToDLXGrid(int[][] matrix) {
+
 		int n = (int) Math.sqrt(matrix.length);
-		
-		Grid g = new Grid(4*n*n*n*n);
-		
-		for(int x=0;x<n*n;x++){
-			for (int y=0;y<n*n;y++){
-				if(matrix[x][y]==0){
-					for(int i=0;i<n*n;i++){
-						int[] col = findContraintesCase(n,x,y,i);
-						g.addRow(findRow(n,x,y,i), col);
+
+		Grid g = new Grid(4 * n * n * n * n);
+
+		for (int y = 0; y < n * n; y++) {
+			for (int x = 0; x < n * n; x++) {
+				if (matrix[y][x] == 0) {
+					for (int i = 0; i < n * n; i++) {
+						int[] col = findContraintesCase(n, x, y, i);
+						g.addRow(findRow(n, x, y, i), col);
+						// for(int c:col)
+						// g.add(findRow(n,x,y,i),c);
 					}
-				}
-				else{
-					int[] col = findContraintesCase(n,x,y,matrix[x][y]);
-					g.addRow(findRow(n,x,y,matrix[x][y]-1), col);
+				} else {
+					int[] col = findContraintesCase(n, x, y, matrix[y][x] - 1);
+					g.addRow(findRow(n, x, y, matrix[y][x] - 1), col);
+					// for(int c:col)
+					// g.add(findRow(n,x,y,matrix[y][x]-1),c);
 				}
 			}
 		}
-		
-		
+
 		return g;
 	}
 }
