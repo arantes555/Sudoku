@@ -12,29 +12,42 @@ public class sudoku {
 		int[][] matrix;
 		if (choice.equals("g")){ // generate
 			matrix = generateSudoku(n);
+			printMatrix(matrix);
+			System.out.println("\nSolving...\n");
+			Grid grid = sudokuToDLXGrid(matrix);
+			grid.solve();
+			Stack<Integer> g = grid.solutions.get(0);//donne une solution
+			printMatrix(DLXRowsToSudoku(g));
+		}
+		else if (choice.equals("b")){
+			matrix = parse(args);
+			System.out.println("\nSolving...\n");
+			printMatrix(matrix);
+			solve(matrix, 0, 0);
+			printMatrix(matrix);
+		}
+		else if (choice.equals("x")){
+			matrix = parse(args);
+			System.out.println("\nSolving...\n");
+			Grid grid = sudokuToDLXGrid(matrix);
+			grid.solve();
+			Stack<Integer> g = grid.solutions.get(0);//donne une solution
+			printMatrix(DLXRowsToSudoku(g));
+
 		}
 		else{
-			matrix = parse(args);
+			System.out.println("Erreur d'argument");
 		}
-		printMatrix(matrix);
-		System.out.println("\nSolving...\n");
-		Grid grid = sudokuToDLXGrid(matrix);
-		grid.solve();
-		Stack<Integer> g = grid.solutions.get(0);//donne une solution
-		printMatrix(DLXRowsToSudoku(g));
-
-		// solve(matrix, 0, 0);
-		// printMatrix(matrix);
 	}
 	static int[][] parse(String[] args) { // Parse les arguments donn�s en
 		// entr�e pour les transformer
 		// en une matrice utilisable
 
-		int n = Integer.parseInt(args[0]);
+		int n = Integer.parseInt(args[1]);
 		int[][] grid = new int[n * n][n * n]; // n=2 ou n=3, les cases sont par
 		// d�faut a 0
 
-		for (int i = 1; i < args.length; ++i) {
+		for (int i = 2; i < args.length; ++i) {
 			int l = Integer.parseInt(args[i].substring(0, 1));
 			int c = Integer.parseInt(args[i].substring(1, 2));
 			int val = Integer.parseInt(args[i].substring(2, 3));
@@ -296,6 +309,25 @@ public class sudoku {
 	static int[][] generateSudoku(int n){
 		int[][] matrix = new int[n*n][n*n];
 		generateSudoku2(matrix,0,0);
+		Grid grid = sudokuToDLXGrid(matrix);
+		grid.solveAll();
+		int nbsol = grid.nbsol;
+		int x=-1, y=-1;
+		int val=0;
+		while (nbsol==1){
+			x=-1; y=-1;
+			while (((x==-1)&&(y==-1))||(matrix[x][y]==0)){
+				x=(int)(Math.random()*n*n);
+				y=(int)(Math.random()*n*n);
+			}
+			val = matrix[x][y];
+			matrix[x][y]=0;
+			grid = sudokuToDLXGrid(matrix);
+			grid.solveAll();
+			nbsol=grid.nbsol;
+			
+		}
+		matrix[x][y]=val;
 		return matrix;
 	}
 	
@@ -323,7 +355,7 @@ public class sudoku {
 			return solve(matrix, nextX, nextY);
 		else {
 			while (true) {
-				matrix[x][y] = (int)Math.random()*n*n +1;
+				matrix[x][y] = (int)(Math.random()*n*n +1);
 				if (isValid(matrix, x, y))
 					if (solve(matrix, nextX, nextY))
 						return true;
