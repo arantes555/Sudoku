@@ -116,7 +116,7 @@ public class Grid {
 				maxsize = j.row;
 			}
 
-		System.out.println("Smallest collumn is " + smallestcol.col);
+		//System.out.println("Smallest collumn is " + smallestcol.col);
 
 		coverCol(smallestcol.col);
 		// tester toutes les lignes

@@ -10,8 +10,6 @@ public class sudoku {
 		Grid grid = sudokuToDLXGrid(matrix);
 		grid.solve();
 		Stack<Integer> g = grid.solutions.get(0);
-		for (int i : g)
-			System.out.println(i);
 		printMatrix(DLXRowsToSudoku(g));
 		
 		// solve(matrix, 0, 0);
@@ -194,10 +192,10 @@ public class sudoku {
 		int r=row-1;
 		int[] c= new int[3];
 		c[1] = r/(n*n*n*n);
-		c[0] = (r%n*n*n*n)/(n*n);
-		c[2] = (r%n*n)+1;
+		c[0] = (r%(n*n*n*n))/(n*n);
+		c[2] = (r%(n*n))+1;
 		
-		System.out.println(row+ " " + c[0]+" "+c[1]+" "+c[2]);
+		//System.out.println(row+ " " + c[0]+" "+c[1]+" "+c[2]);
 		return c;
 		
 	}
@@ -264,7 +262,7 @@ public class sudoku {
 		
 		for(int r : g){
 			int[] c=findCell(n,r);
-			matrix[c[0]][c[1]]=c[2];
+			matrix[c[1]][c[0]]=c[2];
 		}
 		
 		return matrix;
