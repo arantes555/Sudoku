@@ -15,8 +15,6 @@ public class Grid {
 		head=Cell.head();
 		columns[0]=head;
 		Cell.column(head, nbCol,columns);
-		//for(Cell i=head.R;i!=head;i=i.R)
-		//	columns[i.col]=i;
 
 	}
 
@@ -53,13 +51,13 @@ public class Grid {
 
 	public void uncoverCol(int c){
 		Cell C= columns[c];
-		C.unHideH();
 		for(Cell i=C.D;i!=C;i=i.D){
 			for(Cell j=i;j!=i;j=j.R){
 				columns[j.col].row++;
 				j.unHideH();
 			}
 		}
+		C.unHideH();
 	}
 	void solveAll() {
 		if (head.R==head){ 									// Quand la matrice est vide,
@@ -95,6 +93,7 @@ public class Grid {
 		return;
 	}
 	boolean solve() {
+		//System.out.println(head.R==head);
 		if (head.R==head){// Quand la matrice est vide, youpi on a une solution !
 
 			return true; 
@@ -108,6 +107,8 @@ public class Grid {
 				smallestcol = j;
 				maxsize = j.row;
 			}
+		
+		//System.out.println("Smallest collumn is "+smallestcol);
 
 		coverCol(smallestcol.col);
 		// tester toutes les lignes

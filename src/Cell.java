@@ -10,6 +10,8 @@ public class Cell { //Classe qui impl�mente une cellule de matrice de l'agorit
 		else{
 			this.R=R;
 			this.L=R.L;
+			R.L=this;
+			L.R=this;
 		}
 		
 		if (D==null)
@@ -17,10 +19,14 @@ public class Cell { //Classe qui impl�mente une cellule de matrice de l'agorit
 		else{
 			this.D=D;
 			this.U=D.U;
+			U.D=this;
+			D.U=this;
 		}
 		
 		this.row=row;
 		this.col=col;
+		
+		//System.out.println("Creating cell "+row+ ", "+col);
 	}
 	
 	public static Cell head(){ // cr�e une nouvelle tete de matrice
