@@ -15,7 +15,6 @@ public class sudoku {
 		// solve(matrix, 0, 0);
 		// printMatrix(matrix);
 	}
-
 	static int[][] parse(String[] args) { // Parse les arguments donn�s en
 											// entr�e pour les transformer
 											// en une matrice utilisable
@@ -61,7 +60,7 @@ public class sudoku {
 
 	static boolean isValid(int[][] matrix, int x, int y) { // verifie si une
 															// case est valide
-
+		if (matrix[x][y]==0) return false;
 		int v = matrix[x][y];
 		int n = (int) Math.sqrt(matrix.length);
 
