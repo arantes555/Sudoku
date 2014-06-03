@@ -136,25 +136,4 @@ public class Grid {
 
 		return false;
 	}
-
-	public static void main(String args[]) {
-		String test[] = { "0010110", "1001001", "0110010", "1001000",
-				"0100001", "0001101" };
-		int r = test.length, c = test[0].length();
-		Grid e = new Grid(c);
-		ArrayList<int[]> test2 = new ArrayList<int[]>();
-		for (int i = 0; i < r; i++) {
-			test2.add(new int[c]);
-
-			for (int j = 0; j < c; j++) {
-				test2.get(i).clone()[j] = Integer.parseInt(String
-						.valueOf(test[i].charAt(j)));
-			}
-		}
-		if (e.solve())
-			for (int i : e.solutions.get(0))
-				System.out.println(i + ": " + test[i]);
-		else
-			System.out.println("no solution");
-	}
 }

@@ -3,25 +3,36 @@ import java.util.Stack;
 public class sudoku {
 
 	public static void main(String[] args) {
-		int n = Integer.parseInt(args[0]);
-		int[][] matrix = parse(args);
+		/* Pour la génération d'un sudoku d'ordre n donné(ici 3), il faut écrire java sudoku g 3
+		 * Pour la résolution d'un sudoku d'ordre n donné (ici 3), il écrire java nimportequoi 3 001 214
+		 * La syntaxe étant pour ajouter un chiffre dans la grille à la position (x,y) et de valeur v xyv
+		 */
+		String choice = args[0];
+		int n = Integer.parseInt(args[1]);
+		int[][] matrix;
+		if (choice.equals("g")){ // generate
+			matrix = generateSudoku(n);
+		}
+		else{
+			matrix = parse(args);
+		}
 		printMatrix(matrix);
 		System.out.println("\nSolving...\n");
 		Grid grid = sudokuToDLXGrid(matrix);
 		grid.solve();
-		Stack<Integer> g = grid.solutions.get(0);
+		Stack<Integer> g = grid.solutions.get(0);//donne une solution
 		printMatrix(DLXRowsToSudoku(g));
-		
+
 		// solve(matrix, 0, 0);
 		// printMatrix(matrix);
 	}
 	static int[][] parse(String[] args) { // Parse les arguments donn�s en
-											// entr�e pour les transformer
-											// en une matrice utilisable
+		// entr�e pour les transformer
+		// en une matrice utilisable
 
 		int n = Integer.parseInt(args[0]);
 		int[][] grid = new int[n * n][n * n]; // n=2 ou n=3, les cases sont par
-												// d�faut a 0
+		// d�faut a 0
 
 		for (int i = 1; i < args.length; ++i) {
 			int l = Integer.parseInt(args[i].substring(0, 1));
@@ -41,7 +52,7 @@ public class sudoku {
 			if (i % n == 0)
 				System.out.println(" "
 						+ new String(new char[(n * n * 2 + (n - 1) * 2 + 1)])
-								.replace("\0", "-"));
+						.replace("\0", "-"));
 			for (int j = 0; j < n * n; j++) {
 				if (j % n == 0)
 					System.out.print("| ");
@@ -59,7 +70,7 @@ public class sudoku {
 	}
 
 	static boolean isValid(int[][] matrix, int x, int y) { // verifie si une
-															// case est valide
+		// case est valide
 		if (matrix[x][y]==0) return false;
 		int v = matrix[x][y];
 		int n = (int) Math.sqrt(matrix.length);
@@ -75,8 +86,8 @@ public class sudoku {
 		}
 
 		int xi = (x / n) * n; // coordonn�es de la case en haut a gauche du
-								// bloc
-								// auquel appartient la case trait�e
+		// bloc
+		// auquel appartient la case trait�e
 		int yi = (y / n) * n;
 
 		for (int i = 0; i < n; i++) { // v�rifie dans le bloc
@@ -87,17 +98,17 @@ public class sudoku {
 		}
 
 		return true; // si aucun des testes pr�c�dents n'a retourn� false,
-						// la
-						// case est valide
+		// la
+		// case est valide
 	}
 
 	static boolean solve(int[][] matrix, int x, int y) { // r�sout le sudoku
-															// pass� en
-															// cherchant une
-															// solution par un
-															// algorithme de
-															// backtracking
-															// basic
+		// pass� en
+		// cherchant une
+		// solution par un
+		// algorithme de
+		// backtracking
+		// basic
 
 		int n = (int) Math.sqrt(matrix.length);
 
@@ -155,18 +166,18 @@ public class sudoku {
 	}
 
 	static int findCol(int n, contrainte c) { // Cette fonction trouve le
-												// num�ro de colonne
-												// correspondant � une
-												// contrainte.
+		// num�ro de colonne
+		// correspondant � une
+		// contrainte.
 		return (c.type) * (n * n * n * n) + c.a2 * n * n + c.a1 + 1;
 	}
 
 	static contrainte findContrainte(int n, int numCol) { // Cette fonction
-															// trouve la
-															// contrainte
-															// correspondante
-															// � un num�ro
-															// de colonne
+		// trouve la
+		// contrainte
+		// correspondante
+		// � un num�ro
+		// de colonne
 		numCol--;
 		int type = numCol / (n * n * n * n);
 		int a2 = (numCol % (n * n * n * n)) / (n * n);
@@ -176,27 +187,27 @@ public class sudoku {
 	}
 
 	static int findBloc(int n, int x, int y) { // Cette fonction trouve le
-												// num�ro du bloc
-												// correspondant � une case
+		// num�ro du bloc
+		// correspondant � une case
 		return (y / n) * n + (x / n);
 	}
 
 	static int findRow(int n, int x, int y, int val) { // Trouve le numero de
-														// ligne correspondant
-														// au couple case,valeur
+		// ligne correspondant
+		// au couple case,valeur
 		return y * n * n * n * n + x * n * n + val + 1;
 	}
-	
+
 	static int[] findCell(int n, int row){ //Trouve x, y et val avec le numero de la ligne dans Grid
 		int r=row-1;
 		int[] c= new int[3];
 		c[1] = r/(n*n*n*n);
 		c[0] = (r%(n*n*n*n))/(n*n);
 		c[2] = (r%(n*n))+1;
-		
+
 		//System.out.println(row+ " " + c[0]+" "+c[1]+" "+c[2]);
 		return c;
-		
+
 	}
 
 	static int[] findContraintesCase(int n, int x, int y, int val) {
@@ -251,20 +262,20 @@ public class sudoku {
 
 		return g;
 	}
-	
+
 	static int[][] DLXRowsToSudoku(Stack<Integer> g){
-		
+
 		int n2 = (int) Math.sqrt(g.size());
 		int n = (int) Math.sqrt(n2);
-		
+
 		int[][] matrix = new int[n2][n2];
-		
+
 		for(int r : g){
 			int[] c=findCell(n,r);
 			matrix[c[1]][c[0]]=c[2];
 		}
-		
+
 		return matrix;
 	}
-	
+
 }
