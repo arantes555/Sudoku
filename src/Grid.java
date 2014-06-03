@@ -20,7 +20,7 @@ public class Grid {
 
 	}
 
-	public void addRow(int l, int[] col){	//ajoute une ligne a la Grid déja formée, avec le numero de lignes l, avec des 1 dans les colonnes de col
+	public void addRow(int l, int[] col){	//ajoute une ligne a la Grid d√©ja form√©e, avec le numero de lignes l, avec des 1 dans les colonnes de col
 		// /!\ Entrer les lignes dans le desordre peut donner un tableau incorrect
 		if (col.length==0) return;
 
