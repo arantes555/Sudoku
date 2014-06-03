@@ -16,7 +16,7 @@ public class sudoku {
 		if (choice.equals("g")) { // generate
 			matrix = generateSudoku(n);
 			printMatrix(matrix);
-			System.out.println("\nSolving...\n");
+			System.out.println("\nSolution :\n");
 			Grid grid = sudokuToDLXGrid(matrix);
 			grid.solve();
 			Stack<Integer> g = grid.solutions.get(0);// donne une solution
@@ -29,10 +29,10 @@ public class sudoku {
 			solve(matrix, 0, 0);
 			long endTime = System.nanoTime();
 
-			long duration = endTime - startTime;
+			double duration = (endTime - startTime)/1000000.;
 
 			printMatrix(matrix);
-			System.out.println("Execution time : " + duration + "ns");
+			System.out.println("Execution time : " + duration + "ms");
 		} else if (choice.equals("x")) {
 			matrix = parse(args);
 			printMatrix(matrix);
@@ -42,10 +42,10 @@ public class sudoku {
 			grid.solve();
 			Stack<Integer> g = grid.solutions.get(0);// donne une solution
 			long endTime = System.nanoTime();
-			long duration = endTime - startTime;
+			double duration = (endTime - startTime)/1000000.;
 
 			printMatrix(DLXRowsToSudoku(g));
-			System.out.println("Execution time : " + duration + "ns");
+			System.out.println("Execution time : " + duration + "ms");
 
 		} else {
 			System.out.println("Erreur d'argument");
