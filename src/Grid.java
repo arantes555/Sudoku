@@ -156,4 +156,17 @@ public class Grid {
 
 		return false;
 	}
+	
+	void coverLine(Cell c0){
+		ArrayList<Cell> l = new ArrayList<Cell>();
+		l.add(c0);
+		
+		for(Cell c=c0.R;c!=c0;c=c.R)
+			l.add(c);
+		
+		for(Cell c:l){
+			coverCol(c.col);
+		}
+		
+	}
 }

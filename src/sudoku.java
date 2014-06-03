@@ -277,7 +277,7 @@ public class sudoku {
 
 		return matrix;
 	}
-	static int[][] generateSudoku(int n){
+	/*static int[][] generateSudoku(int n){
 		
 		
 		Grid g= sudokuToDLXGrid(new int[n*n][n*n]);
@@ -286,11 +286,50 @@ public class sudoku {
 		for(int i=0;i<(n*n*n*n);i++){
 			Cell c= g.randomCell();
 			stack.add(c.row);
-			g.coverCol(c.col);
+			g.coverLine(c);
 		}
 			
 		
 		return DLXRowsToSudoku(stack);
+	}*/
+	
+	static int[][] generateSudoku(int n){
+		int[][] matrix = new int[n*n][n*n];
+		generateSudoku2(matrix,0,0);
+		return matrix;
+	}
+	
+	static boolean generateSudoku2(int[][] matrix, int x, int y) { // r�sout le sudoku
+		// pass� en
+		// cherchant une
+		// solution par un
+		// algorithme de
+		// backtracking
+		// basic
+
+		int n = (int) Math.sqrt(matrix.length);
+
+		if (y == n * n)
+			return true;
+
+		int nextX = x + 1; // calcule les coordonn�es de la prochaine case
+		int nextY = y;
+		if (nextX == n * n) {
+			nextX = 0;
+			nextY++;
+		}
+
+		if (matrix[x][y] != 0)
+			return solve(matrix, nextX, nextY);
+		else {
+			while (true) {
+				matrix[x][y] = (int)Math.random()*n*n +1;
+				if (isValid(matrix, x, y))
+					if (solve(matrix, nextX, nextY))
+						return true;
+			}
+
+		}
 	}
 	
 }
