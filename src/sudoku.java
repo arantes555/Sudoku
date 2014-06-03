@@ -121,16 +121,16 @@ public class sudoku {
 	static class contrainte{
 		/* Classe repr�sentant les diff�rentes contraintes possibles
 		 * 
-		 * Si type = 1, on cherche la contrainte correspondant au fait qu'une case soit remplie.
+		 * Si type = 0, on cherche la contrainte correspondant au fait qu'une case soit remplie.
 		 * On a alors a1=x, a2=y
 		 * 
-		 * Si type = 2, on cherche la contrainte correspondant au fait qu'une valeur existe dans une ligne.
+		 * Si type = 1, on cherche la contrainte correspondant au fait qu'une valeur existe dans une ligne.
 		 * On a alors a1 le num�ro de ligne, a2 la valeur
 		 * 
-		 * Si type = 3, on cherche la contrainte correspondant au fait qu'une valeur existe dans une colonne.
+		 * Si type = 2, on cherche la contrainte correspondant au fait qu'une valeur existe dans une colonne.
 		 * On a alors a1 le num�ro de colonne, a2 la valeur
 		 * 
-		 * Si type = 4, on cherche la contrainte correspondant au fait qu'une valeur existe dans un bloc.
+		 * Si type = 3, on cherche la contrainte correspondant au fait qu'une valeur existe dans un bloc.
 		 * On a alors a1 le num�ro du bloc, a2 la valeur
 		 */
 		int type,a1,a2;
@@ -141,12 +141,12 @@ public class sudoku {
 	}
 	
 	static int findCol(int n, contrainte c){ //Cette fonction trouve le num�ro de colonne correspondant � une contrainte.
-		return (c.type-1)*(n*n*n*n)+c.a2*n*n+c.a1+1;
+		return (c.type)*(n*n*n*n)+c.a2*n*n+c.a1+1;
 	}
 	
 	static contrainte findContrainte(int n, int numCol){ // Cette fonction trouve la contrainte correspondante � un num�ro de colonne
 		numCol--;
-		int type = numCol/(n*n*n*n)+1;
+		int type = numCol/(n*n*n*n);
 		int a2 = (numCol%type)/(n*n);
 		int a1= (numCol%type)%a2;
 		return new contrainte(type, a1, a2);
@@ -155,6 +155,29 @@ public class sudoku {
 	
 	static int findBloc(int n, int x, int y){	// Cette fonction trouve le num�ro du bloc correspondant � une case
 		return (y/n)*n+(x/n);
+	}
+	
+	static int findRow(int n, int x, int y, int val){ // Trouve le numero de ligne correspondant au couple case,valeur
+		return y*n*n*n*n+x*n*n+val+1;
+	}
+	
+	static int[] findContraintesCase(int n, int x, int y, int val){
+		
+		contrainte[] contraintes = new contrainte[4];
+		
+		contraintes[0]=new contrainte(0, x, y);
+		contraintes[1]=new contrainte(1,y,val);
+		contraintes[2]=new contrainte(2,x,val);
+		contraintes[3]= new contrainte(3,findBloc(n,x,y),val);
+		
+		int[] col = new int[4];
+		
+		for(int i=0;i<4;i++){
+			col[i]=findCol(n,contraintes[i]);
+		}
+		
+		return col;
+		
 	}
 	
 	static Grid sudokuToDLXGrid(int[][] matrix){
@@ -166,12 +189,15 @@ public class sudoku {
 		for(int x=0;x<n*n;x++){
 			for (int y=0;y<n*n;y++){
 				if(matrix[x][y]==0){
-					
+					for(int i=1;i<=9;i++){
+						int[] col = findContraintesCase(n,x,y,i);
+						g.addRow(findRow(n,x,y,i), col);
+					}
 				}
 			}
 		}
 		
 		
-		return null;
+		return g;
 	}
 }
