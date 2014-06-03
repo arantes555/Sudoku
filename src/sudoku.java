@@ -3,42 +3,55 @@ import java.util.Stack;
 public class sudoku {
 
 	public static void main(String[] args) {
-		/* Pour la génération d'un sudoku d'ordre n donné(ici 3), il faut écrire java sudoku g 3
-		 * Pour la résolution d'un sudoku d'ordre n donné (ici 3), il écrire java nimportequoi 3 001 214
-		 * La syntaxe étant pour ajouter un chiffre dans la grille à la position (x,y) et de valeur v xyv
+		/*
+		 * Pour la génération d'un sudoku d'ordre n donné(ici 3), il faut
+		 * écrire java sudoku g 3 Pour la résolution d'un sudoku d'ordre n
+		 * donné (ici 3), il écrire java nimportequoi 3 001 214 La syntaxe
+		 * étant pour ajouter un chiffre dans la grille à la position (x,y) et
+		 * de valeur v xyv
 		 */
 		String choice = args[0];
 		int n = Integer.parseInt(args[1]);
 		int[][] matrix;
-		if (choice.equals("g")){ // generate
+		if (choice.equals("g")) { // generate
 			matrix = generateSudoku(n);
 			printMatrix(matrix);
 			System.out.println("\nSolving...\n");
 			Grid grid = sudokuToDLXGrid(matrix);
 			grid.solve();
-			Stack<Integer> g = grid.solutions.get(0);//donne une solution
+			Stack<Integer> g = grid.solutions.get(0);// donne une solution
 			printMatrix(DLXRowsToSudoku(g));
-		}
-		else if (choice.equals("b")){
+		} else if (choice.equals("b")) {
 			matrix = parse(args);
-			System.out.println("\nSolving...\n");
 			printMatrix(matrix);
+			System.out.println("\nSolving...\n");
+			long startTime = System.nanoTime();
 			solve(matrix, 0, 0);
+			long endTime = System.nanoTime();
+
+			long duration = endTime - startTime;
+
 			printMatrix(matrix);
-		}
-		else if (choice.equals("x")){
+			System.out.println("Execution time : " + duration + "ns");
+		} else if (choice.equals("x")) {
 			matrix = parse(args);
+			printMatrix(matrix);
 			System.out.println("\nSolving...\n");
+			long startTime = System.nanoTime();
 			Grid grid = sudokuToDLXGrid(matrix);
 			grid.solve();
-			Stack<Integer> g = grid.solutions.get(0);//donne une solution
-			printMatrix(DLXRowsToSudoku(g));
+			Stack<Integer> g = grid.solutions.get(0);// donne une solution
+			long endTime = System.nanoTime();
+			long duration = endTime - startTime;
 
-		}
-		else{
+			printMatrix(DLXRowsToSudoku(g));
+			System.out.println("Execution time : " + duration + "ns");
+
+		} else {
 			System.out.println("Erreur d'argument");
 		}
 	}
+
 	static int[][] parse(String[] args) { // Parse les arguments donn�s en
 		// entr�e pour les transformer
 		// en une matrice utilisable
@@ -65,7 +78,7 @@ public class sudoku {
 			if (i % n == 0)
 				System.out.println(" "
 						+ new String(new char[(n * n * 2 + (n - 1) * 2 + 1)])
-						.replace("\0", "-"));
+								.replace("\0", "-"));
 			for (int j = 0; j < n * n; j++) {
 				if (j % n == 0)
 					System.out.print("| ");
@@ -84,7 +97,8 @@ public class sudoku {
 
 	static boolean isValid(int[][] matrix, int x, int y) { // verifie si une
 		// case est valide
-		if (matrix[x][y]==0) return false;
+		if (matrix[x][y] == 0)
+			return false;
 		int v = matrix[x][y];
 		int n = (int) Math.sqrt(matrix.length);
 
@@ -194,7 +208,7 @@ public class sudoku {
 		numCol--;
 		int type = numCol / (n * n * n * n);
 		int a2 = (numCol % (n * n * n * n)) / (n * n);
-		int a1 = (numCol % n*n) ;
+		int a1 = (numCol % n * n);
 		return new contrainte(type, a1, a2);
 
 	}
@@ -211,14 +225,15 @@ public class sudoku {
 		return y * n * n * n * n + x * n * n + val + 1;
 	}
 
-	static int[] findCell(int n, int row){ //Trouve x, y et val avec le numero de la ligne dans Grid
-		int r=row-1;
-		int[] c= new int[3];
-		c[1] = r/(n*n*n*n);
-		c[0] = (r%(n*n*n*n))/(n*n);
-		c[2] = (r%(n*n))+1;
+	static int[] findCell(int n, int row) { // Trouve x, y et val avec le numero
+											// de la ligne dans Grid
+		int r = row - 1;
+		int[] c = new int[3];
+		c[1] = r / (n * n * n * n);
+		c[0] = (r % (n * n * n * n)) / (n * n);
+		c[2] = (r % (n * n)) + 1;
 
-		//System.out.println(row+ " " + c[0]+" "+c[1]+" "+c[2]);
+		// System.out.println(row+ " " + c[0]+" "+c[1]+" "+c[2]);
 		return c;
 
 	}
@@ -238,12 +253,11 @@ public class sudoku {
 			col[i] = findCol(n, contraintes[i]);
 		}
 
-		/*System.out.print("Case " + x + "," + y + " valeur:" + val
-				+ ". Contraintes : ");
-		for (int c : col) {
-			System.out.print(c + ", ");
-		}
-		System.out.print('\n');*/
+		/*
+		 * System.out.print("Case " + x + "," + y + " valeur:" + val +
+		 * ". Contraintes : "); for (int c : col) { System.out.print(c + ", ");
+		 * } System.out.print('\n');
+		 */
 
 		return col;
 
@@ -276,62 +290,63 @@ public class sudoku {
 		return g;
 	}
 
-	static int[][] DLXRowsToSudoku(Stack<Integer> g){
+	static int[][] DLXRowsToSudoku(Stack<Integer> g) {
 
 		int n2 = (int) Math.sqrt(g.size());
 		int n = (int) Math.sqrt(n2);
 
 		int[][] matrix = new int[n2][n2];
 
-		for(int r : g){
-			int[] c=findCell(n,r);
-			matrix[c[1]][c[0]]=c[2];
+		for (int r : g) {
+			int[] c = findCell(n, r);
+			matrix[c[1]][c[0]] = c[2];
 		}
 
 		return matrix;
 	}
-	/*static int[][] generateSudoku(int n){
-		
-		
-		Grid g= sudokuToDLXGrid(new int[n*n][n*n]);
-		
-		Stack<Integer> stack = new Stack<Integer>();
-		for(int i=0;i<(n*n*n*n);i++){
-			Cell c= g.randomCell();
-			stack.add(c.row);
-			g.coverLine(c);
-		}
-			
-		
-		return DLXRowsToSudoku(stack);
-	}*/
-	
-	static int[][] generateSudoku(int n){
-		int[][] matrix = new int[n*n][n*n];
-		generateSudoku2(matrix,0,0);
+
+	/*
+	 * static int[][] generateSudoku(int n){
+	 * 
+	 * 
+	 * Grid g= sudokuToDLXGrid(new int[n*n][n*n]);
+	 * 
+	 * Stack<Integer> stack = new Stack<Integer>(); for(int
+	 * i=0;i<(n*n*n*n);i++){ Cell c= g.randomCell(); stack.add(c.row);
+	 * g.coverLine(c); }
+	 * 
+	 * 
+	 * return DLXRowsToSudoku(stack); }
+	 */
+
+	static int[][] generateSudoku(int n) {
+		int[][] matrix = new int[n * n][n * n];
+		generateSudoku2(matrix, 0, 0);
 		Grid grid = sudokuToDLXGrid(matrix);
 		grid.solveAll();
 		int nbsol = grid.nbsol;
-		int x=-1, y=-1;
-		int val=0;
-		while (nbsol==1){
-			x=-1; y=-1;
-			while (((x==-1)&&(y==-1))||(matrix[x][y]==0)){
-				x=(int)(Math.random()*n*n);
-				y=(int)(Math.random()*n*n);
+		int x = -1, y = -1;
+		int val = 0;
+		while (nbsol == 1) {
+			x = -1;
+			y = -1;
+			while (((x == -1) && (y == -1)) || (matrix[x][y] == 0)) {
+				x = (int) (Math.random() * n * n);
+				y = (int) (Math.random() * n * n);
 			}
 			val = matrix[x][y];
-			matrix[x][y]=0;
+			matrix[x][y] = 0;
 			grid = sudokuToDLXGrid(matrix);
 			grid.solveAll();
-			nbsol=grid.nbsol;
-			
+			nbsol = grid.nbsol;
+
 		}
-		matrix[x][y]=val;
+		matrix[x][y] = val;
 		return matrix;
 	}
-	
-	static boolean generateSudoku2(int[][] matrix, int x, int y) { // r�sout le sudoku
+
+	static boolean generateSudoku2(int[][] matrix, int x, int y) { // r�sout
+																	// le sudoku
 		// pass� en
 		// cherchant une
 		// solution par un
@@ -355,7 +370,7 @@ public class sudoku {
 			return solve(matrix, nextX, nextY);
 		else {
 			while (true) {
-				matrix[x][y] = (int)(Math.random()*n*n +1);
+				matrix[x][y] = (int) (Math.random() * n * n + 1);
 				if (isValid(matrix, x, y))
 					if (solve(matrix, nextX, nextY))
 						return true;
@@ -363,5 +378,5 @@ public class sudoku {
 
 		}
 	}
-	
+
 }
