@@ -165,8 +165,10 @@ public class sudoku {
 	
 	static int[] findContraintesCase(int n, int x, int y, int val){
 		
-		contrainte[] contraintes = new contrainte[4];
+		//System.out.print("Case "+x+","+y+ " valeur:"+val+". Contraintes :");
 		
+		contrainte[] contraintes = new contrainte[4];
+				
 		contraintes[0]=new contrainte(0, x, y);
 		contraintes[1]=new contrainte(1,y,val);
 		contraintes[2]=new contrainte(2,x,val);
@@ -178,8 +180,13 @@ public class sudoku {
 			col[i]=findCol(n,contraintes[i]);
 		}
 		
+		/*for(int c : col){
+			System.out.print(c+", ");
+		}
+		System.out.print('\n');*/
+				
 		return col;
-		
+
 	}
 	
 	static Grid sudokuToDLXGrid(int[][] matrix){
@@ -191,10 +198,14 @@ public class sudoku {
 		for(int x=0;x<n*n;x++){
 			for (int y=0;y<n*n;y++){
 				if(matrix[x][y]==0){
-					for(int i=1;i<=9;i++){
+					for(int i=0;i<n*n;i++){
 						int[] col = findContraintesCase(n,x,y,i);
 						g.addRow(findRow(n,x,y,i), col);
 					}
+				}
+				else{
+					int[] col = findContraintesCase(n,x,y,matrix[x][y]);
+					g.addRow(findRow(n,x,y,matrix[x][y]-1), col);
 				}
 			}
 		}

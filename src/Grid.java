@@ -23,9 +23,11 @@ public class Grid {
 	public void addRow(int l, int[] col){	//ajoute une ligne a la Grid déja formée, avec le numero de lignes l, avec des 1 dans les colonnes de col
 		// /!\ Entrer les lignes dans le desordre peut donner un tableau incorrect
 		
-		System.out.print("Adding Row "+l+" : [");
+		/*System.out.print("Adding Row "+l+" : [");
 		for(int i : col)
 			System.out.print(i+", ");
+		System.out.println("]");*/
+		
 		if (col.length==0) return;
 
 		Cell c= new Cell(null,columns[col[0]], l, col[0]);
