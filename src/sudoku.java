@@ -83,7 +83,7 @@ public class sudoku {
 						// case est valide
 	}
 
-	static boolean solve(int[][] matrix, int x, int y) { // rï¿½soud le sudoku
+	static boolean solve(int[][] matrix, int x, int y) { // rï¿½sout le sudoku
 															// passï¿½ en
 															// cherchant une
 															// solution par un
@@ -119,19 +119,19 @@ public class sudoku {
 	}
 
 	static class contrainte{
-		/* Classe reprŽsentant les diffŽrentes contraintes possibles
+		/* Classe reprï¿½sentant les diffï¿½rentes contraintes possibles
 		 * 
 		 * Si type = 1, on cherche la contrainte correspondant au fait qu'une case soit remplie.
 		 * On a alors a1=x, a2=y
 		 * 
 		 * Si type = 2, on cherche la contrainte correspondant au fait qu'une valeur existe dans une ligne.
-		 * On a alors a1 le numŽro de ligne, a2 la valeur
+		 * On a alors a1 le numï¿½ro de ligne, a2 la valeur
 		 * 
 		 * Si type = 3, on cherche la contrainte correspondant au fait qu'une valeur existe dans une colonne.
-		 * On a alors a1 le numŽro de colonne, a2 la valeur
+		 * On a alors a1 le numï¿½ro de colonne, a2 la valeur
 		 * 
 		 * Si type = 4, on cherche la contrainte correspondant au fait qu'une valeur existe dans un bloc.
-		 * On a alors a1 le numŽro du bloc, a2 la valeur
+		 * On a alors a1 le numï¿½ro du bloc, a2 la valeur
 		 */
 		int type,a1,a2;
 		
@@ -140,11 +140,11 @@ public class sudoku {
 		}
 	}
 	
-	static int findCol(int n, contrainte c){ //Cette fonction trouve le numŽro de colonne correspondant ˆ une contrainte.
+	static int findCol(int n, contrainte c){ //Cette fonction trouve le numï¿½ro de colonne correspondant ï¿½ une contrainte.
 		return (c.type-1)*(n*n*n*n)+c.a2*n*n+c.a1+1;
 	}
 	
-	static contrainte findContrainte(int n, int numCol){ // Cette fonction trouve la contrainte correspondante ˆ un numŽro de colonne
+	static contrainte findContrainte(int n, int numCol){ // Cette fonction trouve la contrainte correspondante ï¿½ un numï¿½ro de colonne
 		numCol--;
 		int type = numCol/(n*n*n*n)+1;
 		int a2 = (numCol%type)/(n*n);
@@ -153,7 +153,7 @@ public class sudoku {
 		
 	}
 	
-	static int findBloc(int n, int x, int y){	// Cette fonction trouve le numŽro du bloc correspondant ˆ une case
+	static int findBloc(int n, int x, int y){	// Cette fonction trouve le numï¿½ro du bloc correspondant ï¿½ une case
 		return (y/n)*n+(x/n);
 	}
 	
