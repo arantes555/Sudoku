@@ -5,8 +5,10 @@ public class sudoku {
 		int[][] matrix = parse(args);
 		printMatrix(matrix);
 		System.out.println("\nSolving...\n");
-		solve(matrix, 0, 0);
-		printMatrix(matrix);
+		Grid grid= sudokuToDLXGrid(matrix);
+		grid.solve();
+		//solve(matrix, 0, 0);
+		//printMatrix(matrix);
 	}
 
 	static int[][] parse(String[] args) { // Parse les arguments donn�s en
