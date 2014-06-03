@@ -69,10 +69,9 @@ public class Grid {
 			// cela signifie que la pile actuelle de solutions est une solution
 			// => l'enregistrer, la cloner
 			nbsol++;
-			solutions.add(solutions.get(nbsol - 1));
+			solutions.add((Stack<Integer>) solutions.get(nbsol-1).clone());
 			return;
 		}
-
 		// choisir la colonne la plus petite
 		int maxsize = Integer.MAX_VALUE;
 		Cell smallestcol = null;
