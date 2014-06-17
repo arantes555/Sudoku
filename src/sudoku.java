@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class sudoku {
@@ -12,16 +13,34 @@ public class sudoku {
 		 */
 		String choice = args[0];
 		int n = Integer.parseInt(args[1]);
-		int[][] matrix;
-		if (choice.equals("g")) { // generate
+		int[][] matrix = null;
+		if (choice.equals("g")) { // Arguments : "g" n, on genere une grille minimale de taille n 
 			matrix = generateSudoku(n);
 			printMatrix(matrix);
+			System.out.println("Nombre de dévoilés : "+nbDevoile(matrix));
 			System.out.println("\nSolution :\n");
 			Grid grid = sudokuToDLXGrid(matrix);
 			grid.solve();
 			Stack<Integer> g = grid.solutions.get(0);// donne une solution
 			printMatrix(DLXRowsToSudoku(g));
-		} else if (choice.equals("b")) {
+		} else if(choice.equals("G")){ // Arguments : "G" n g, on genere g grilles minimales de taille n, et on donne celle ayant le plus petit nombre de devoiles 
+			int iMax = Integer.parseInt(args[2]);
+			int nbDevMin = 81;
+			for(int i =0;i<iMax; i++){
+				int[][] matrixTemp = generateSudoku(n);
+				if(nbDevoile(matrixTemp)<nbDevMin){
+					matrix = matrixTemp;
+					nbDevMin = nbDevoile(matrix);
+				}
+			}
+			printMatrix(matrix);
+			System.out.println("Nombre de dévoilés : "+nbDevoile(matrix));
+			System.out.println("\nSolution :\n");
+			Grid grid = sudokuToDLXGrid(matrix);
+			grid.solve();
+			Stack<Integer> g = grid.solutions.get(0);// donne une solution
+			printMatrix(DLXRowsToSudoku(g));
+		} else if (choice.equals("b")) { //Arguments : "b" n sudoku, on resout la grille sudoku de taille n par bactracking simple 
 			matrix = parse(args);
 			printMatrix(matrix);
 			System.out.println("\nSolving...\n");
@@ -33,7 +52,37 @@ public class sudoku {
 
 			printMatrix(matrix);
 			System.out.println("Execution time : " + duration + "ms");
-		} else if (choice.equals("x")) {
+		} else if (choice.equals("t")){
+			int iMax = Integer.parseInt(args[2]);
+			double[] tempsG = new double[iMax]; //liste des temps de generation
+			double[] tempsB = new double[iMax]; //liste des temps de solve en backTracking
+			double[] tempsX = new double[iMax]; //liste des temps de solve en dancingLinks
+			
+			for(int i =0;i<iMax; i++){ //on genere iMax grilles
+				long startTime = System.nanoTime();
+				matrix = generateSudoku(n);
+				long endTime = System.nanoTime();
+				tempsG[i]=(endTime - startTime)/1000000.;		
+				
+				startTime = System.nanoTime();
+				solve(matrix, 0, 0); //on resout par backtraking simple
+				endTime = System.nanoTime();
+				tempsB[i]=(endTime - startTime)/1000000.;
+				
+				startTime = System.nanoTime();
+				Grid grid = sudokuToDLXGrid(matrix);
+				grid.solve(); // on resout par dancing links
+				matrix = DLXRowsToSudoku(grid.solutions.get(0));
+				endTime = System.nanoTime();
+				tempsX[i]=(endTime - startTime)/1000000.;		
+				
+			}
+			System.out.println("Sur "+iMax+" grilles :");
+			System.out.println("Temps de generation moyen : "+mean(tempsG)+" ms");
+			System.out.println("Temps de resolution par Backtracking simple moyen : "+mean(tempsB)+" ms");
+			System.out.println("Temps de resolution par Dancing Links moyen : "+mean(tempsX)+" ms");
+
+		} else if (choice.equals("x")) { //Arguments : "x" n sudoku, on resout la grille sudoku de taille n par dancing links 
 			matrix = parse(args);
 			printMatrix(matrix);
 			System.out.println("\nSolving...\n");
@@ -50,6 +99,14 @@ public class sudoku {
 		} else {
 			System.out.println("Erreur d'argument");
 		}
+	}
+	
+	public static double mean(double[] m) {
+	    double sum = 0;
+	    for (int i = 0; i < m.length; i++) {
+	        sum += m[i];
+	    }
+	    return sum / m.length;
 	}
 
 	static int[][] parse(String[] args) { // Parse les arguments donn�s en
@@ -320,29 +377,54 @@ public class sudoku {
 	 */
 
 	static int[][] generateSudoku(int n) {
+		//Genere un sudoku minimal
+		
 		int[][] matrix = new int[n * n][n * n];
-		generateSudoku2(matrix, 0, 0);
+		generateSudoku2(matrix, 0, 0); // on genere un sudoku plein
+		
+		
+		ArrayList<XY> cases = new ArrayList<XY>(); 
+		for(int x=0;x<n*n;x++){
+			for(int y=0;y<n*n;y++){
+				cases.add(new XY(x,y)); //on cree une liste des cases de ce sudoku
+			}
+		}
+		
+		while(!cases.isEmpty()){ //tant que la liste n'est pas vide
+			XY c= cases.remove((int) (Math.random()*cases.size())); //on choisit une case aleatoirement et on la retire de la liste
+			int temp=matrix[c.x][c.y];
+			matrix[c.x][c.y]=0; //on vide cette case
+			
+			if(nbSol(matrix)>1) 
+				matrix[c.x][c.y]=temp; //S'il existe plusieurs solutions, on remet la valeur
+		}
+		
+		
+		return matrix;
+	}
+	
+	static int nbSol(int[][] matrix){
 		Grid grid = sudokuToDLXGrid(matrix);
 		grid.solveAll();
-		int nbsol = grid.nbsol;
-		int x = -1, y = -1;
-		int val = 0;
-		while (nbsol == 1) {
-			x = -1;
-			y = -1;
-			while (((x == -1) && (y == -1)) || (matrix[x][y] == 0)) {
-				x = (int) (Math.random() * n * n);
-				y = (int) (Math.random() * n * n);
-			}
-			val = matrix[x][y];
-			matrix[x][y] = 0;
-			grid = sudokuToDLXGrid(matrix);
-			grid.solveAll();
-			nbsol = grid.nbsol;
-
+		return grid.nbsol;
+	}
+	
+	static class XY{
+		int x;
+		int y;
+		XY(int x, int y){
+			this.x=x;
+			this.y=y;
 		}
-		matrix[x][y] = val;
-		return matrix;
+	}
+	
+	static int nbDevoile(int[][] matrix){
+		int n = 0;
+		for(int[] col : matrix)
+			for(int c : col)
+				if(c!=0)
+					n++;
+		return n;
 	}
 
 	static boolean generateSudoku2(int[][] matrix, int x, int y) { // r�sout
@@ -353,6 +435,7 @@ public class sudoku {
 		// algorithme de
 		// backtracking
 		// basic
+		// => Genere un sudoku plein
 
 		int n = (int) Math.sqrt(matrix.length);
 
@@ -367,14 +450,20 @@ public class sudoku {
 		}
 
 		if (matrix[x][y] != 0)
-			return solve(matrix, nextX, nextY);
+			return generateSudoku2(matrix, nextX, nextY);
 		else {
-			while (true) {
-				matrix[x][y] = (int) (Math.random() * n * n + 1);
+			ArrayList<Integer> valeurs = new ArrayList<Integer>();
+			for(int i =1; i <= n*n; i++)
+				valeurs.add(new Integer(i)); // on cree une liste de valeurs possibles
+			while (!valeurs.isEmpty()) {
+				matrix[x][y] = valeurs.remove((int) (Math.random()*valeurs.size())); //on choisi aleatoirement une des valeurs non testees
+				//printMatrix(matrix);
 				if (isValid(matrix, x, y))
-					if (solve(matrix, nextX, nextY))
+					if (generateSudoku2(matrix, nextX, nextY))
 						return true;
 			}
+			matrix[x][y] = 0;
+			return false;
 
 		}
 	}
